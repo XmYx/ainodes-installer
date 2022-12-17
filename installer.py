@@ -167,8 +167,13 @@ class MainWindow(QtWidgets.QWidget):
         print(f"Launching SD UI")
         #launch = 'frontend/main_app.py'
         #exec(open(launch).read(), {'__file__': launch})
+        os.chdir("ainodes-pyside")
 
-        sys.path.append('ainodes-pyside')
+        # Run the git pull command
+        subprocess.run(["git", "pull"])
+        #os.chdir("..")
+
+        sys.path.append('../ainodes-pyside')
         import frontend.startup_new
         frontend.startup_new.run_app()
 
