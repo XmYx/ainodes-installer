@@ -183,6 +183,11 @@ class MainWindow(QtWidgets.QWidget):
         return installed
     def installPackages(self):
         """Installs all the packages listed in the requirements.txt file."""
+        torch_command = os.environ.get('TORCH_COMMAND',
+                                       "pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117")
+
+        run(f'{torch_command}', "Installing torch and torchvision", "Couldn't install torch")
+
         subprocess.run(['pip', 'install', "--extra-index-url", "https://download.pytorch.org/whl/cu117", '-r', 'requirements.txt'])
 
         gfpgan_package = os.environ.get('GFPGAN_PACKAGE', "git+https://github.com/TencentARC/GFPGAN.git@8d2447a2d918f8eba5a4a01463fd48e45126a379")
@@ -230,7 +235,20 @@ class MainWindow(QtWidgets.QWidget):
 
         if not is_installed("lpips"):
             run_pip(f"install -r {os.path.join(repo_dir('CodeFormer'), 'requirements.txt')}", "requirements for CodeFormer")
+        if not is_installed("gfpgan"):
+            run_pip(f"install {gfpgan_package}", "gfpgan")
 
+        if not is_installed("clip"):
+            run_pip(f"install {clip_package}", "clip")
+        if not is_installed("deepdanbooru"):
+            run_pip(
+                f"install {deepdanbooru_package}#egg=deepdanbooru[tensorflow] tensorflow==2.10.0 tensorflow-io==0.27.0",
+                "deepdanbooru")
+
+        try:
+            subprocess.run(["pip", "install", "xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
+        except:
+            pass
 
 def reinitUI():
     global window
