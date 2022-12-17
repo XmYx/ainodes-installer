@@ -169,8 +169,8 @@ class MainWindow(QtWidgets.QWidget):
         #exec(open(launch).read(), {'__file__': launch})
 
         sys.path.append('ainodes-pyside')
-        import frontend.startup
-        frontend.startup.run_app()
+        import frontend.startup_new
+        frontend.startup_new.run_app()
 
     def isPackageInstalled(self, package):
         """Returns True if the given package is installed, False otherwise."""
