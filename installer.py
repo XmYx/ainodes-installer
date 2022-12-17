@@ -191,9 +191,10 @@ class MainWindow(QtWidgets.QWidget):
 
         if '/' in branch:
             branch = branch.split('/')[2]
-        else:
+        elif '*' in branch:
             branch = branch.replace("* ", "")
-        print(branch)
+        else:
+            branch = branch
         subprocess.run(["git", "checkout", branch])
         # Run the git pull command
         subprocess.run(["git", "pull"])
