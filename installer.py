@@ -5,9 +5,7 @@ import sys
 
 import pkg_resources
 subprocess.run(["pip", "install", "pyside6"])
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel
-
-
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QComboBox
 
 python = sys.executable
 index_url = os.environ.get('INDEX_URL', "")
@@ -96,6 +94,7 @@ class MainWindow(QtWidgets.QWidget):
         super().__init__()
 
         self.initUI()
+
         self.installButton = QtWidgets.QPushButton('Install All', self)
         self.installButton.clicked.connect(self.installPackages)
 
@@ -103,8 +102,28 @@ class MainWindow(QtWidgets.QWidget):
         self.runButton.clicked.connect(self.run_aiNodes)
         # Create a layout to hold the list widget and button
         layout = QtWidgets.QVBoxLayout(self)
+
+        os.chdir("ainodes-pyside")
+
+        # Fetch the list of branches
+        output = subprocess.run(["git", "branch", "-a"], capture_output=True).stdout
+        print(output)
+        # Split the output into a list of branches
+        branches = output.decode().strip().split("\n")
+
+        # Create the QComboBox
+        self.combo_box = QComboBox()
+
+        # Populate the QComboBox with the list of branches
+        for branch in branches:
+            self.combo_box.addItem(branch)
+
+
+        os.chdir("..")
+
         layout.addWidget(self.packageList)
         layout.addWidget(self.installButton)
+        layout.addWidget(self.combo_box)
         layout.addWidget(self.runButton)
 
     def initUI(self):
@@ -168,7 +187,14 @@ class MainWindow(QtWidgets.QWidget):
         #launch = 'frontend/main_app.py'
         #exec(open(launch).read(), {'__file__': launch})
         os.chdir("ainodes-pyside")
+        branch = self.combo_box.currentText()
 
+        if '/' in branch:
+            branch = branch.split('/')[2]
+        else:
+            branch = branch.replace("* ", "")
+        print(branch)
+        subprocess.run(["git", "checkout", branch])
         # Run the git pull command
         subprocess.run(["git", "pull"])
         #os.chdir("..")
