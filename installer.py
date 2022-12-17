@@ -115,8 +115,14 @@ class MainWindow(QtWidgets.QWidget):
         self.combo_box = QComboBox()
 
         # Populate the QComboBox with the list of branches
+        x = 0
         for branch in branches:
-            self.combo_box.addItem(branch)
+            if "/" in branch and ">" not in branch:
+                item = branch.split('/')[2]
+                self.combo_box.addItem(item)
+                if item == 'main':
+                    self.combo_box.setCurrentIndex(x)
+                x += 1
 
 
         os.chdir("..")
@@ -180,7 +186,7 @@ class MainWindow(QtWidgets.QWidget):
         elif 'xformers' in requirement:
             subprocess.run(["pip", "install", "xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
         else:
-            subprocess.run(["pip", "install", requirement])
+            subprocess.run(["pip", "install", requirement, "--upgrade"])
         #reinitUI()
     def run_aiNodes(self):
         print(f"Launching SD UI")
