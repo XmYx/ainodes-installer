@@ -162,7 +162,7 @@ class MainWindow(QtWidgets.QWidget):
             subprocess.run(["pip", "install", "xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
         else:
             subprocess.run(["pip", "install", requirement])
-        reinitUI()
+        #reinitUI()
     def run_aiNodes(self):
         print(f"Launching SD UI")
         #launch = 'frontend/main_app.py'
