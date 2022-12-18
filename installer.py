@@ -24,7 +24,33 @@ dir_repos = "ainodes-pyside/src"
 
 
 
+def create_windows_shortcut():
+    subprocess.run(["pip", "install", "-q", "pypiwin32"])
+    import win32com.client
 
+    # Set the path to the file or directory that you want to create a shortcut for
+
+    target = os.path.join(os.getcwd(), "start.bat")
+
+
+    # Create the shortcut
+    shell = win32com.client.Dispatch("WScript.Shell")
+
+    # Get the path to the desktop folder
+    shortcut_path = shell.SpecialFolders("Desktop")
+    # Set the name and location for the shortcut
+    shortcut_name = "aiNodes Launcher.lnk"
+    if not os.path.exists(os.path.join(shortcut_path, shortcut_name)):
+        #shortcut_path = r"C:\Users\Username\Desktop"
+        shortcut = shell.CreateShortcut(os.path.join(shortcut_path, shortcut_name))
+
+        # Set the shortcut's properties
+        shortcut.Targetpath = target
+        shortcut.WorkingDirectory = os.getcwd()
+        shortcut.IconLocation = os.path.join(os.getcwd(), "splash_2.ico")
+
+        # Save the shortcut
+        shortcut.Save()
 
 def run_pip(args, desc=None):
     index_url_line = f' --index-url {index_url}' if index_url != '' else ''
@@ -378,6 +404,8 @@ def reinitUI():
 if __name__ == '__main__':
     #download_model()
     global window
+    if "Windows" in platform():
+        create_windows_shortcut()
     #create_venv('test_venv')
     #activate_venv('test_venv')
     app = QtWidgets.QApplication()
@@ -418,4 +446,5 @@ if __name__ == '__main__':
 │                                     www.patreon.com/deforum                                       │
 └───────────────────────────────────────────────────────────────────────────────────────────────────┘
     ''')
+
     app.exec()
