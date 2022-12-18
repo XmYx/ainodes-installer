@@ -8,7 +8,7 @@ from PySide6.QtGui import QIcon
 
 subprocess.run(["pip", "install", "-q", "pyside6"])
 subprocess.run(["pip", "install", "-q", "huggingface-hub"])
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QComboBox, QLineEdit
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QComboBox, QLineEdit, QCheckBox
 from huggingface_hub import hf_hub_download
 python = sys.executable
 index_url = os.environ.get('INDEX_URL', "")
@@ -25,6 +25,9 @@ dir_repos = "ainodes-pyside/src"
 
 
 def create_windows_shortcut():
+    if "ainodes-pyside" in os.getcwd():
+        os.chdir("..")
+
     subprocess.run(["pip", "install", "-q", "pypiwin32"])
     import win32com.client
 
@@ -166,6 +169,7 @@ class MainWindow(QtWidgets.QWidget):
         self.model_select.addItems(self.models)
         self.model_download = QPushButton("Download Model")
         self.model_download.clicked.connect(self.download_hf_model)
+        self.shortcut = QCheckBox("Create Desktop shortcut")
         layout.addWidget(self.packageList)
         layout.addWidget(self.installButton)
 
@@ -175,6 +179,8 @@ class MainWindow(QtWidgets.QWidget):
         layout.addWidget(self.model_download)
 
         layout.addWidget(self.branch_select)
+        if "Windows" in platform():
+            layout.addWidget(self.shortcut)
         layout.addWidget(self.runButton)
 
     def initUI(self):
@@ -286,7 +292,9 @@ class MainWindow(QtWidgets.QWidget):
         print(f"Launching SD UI")
         #launch = 'frontend/main_app.py'
         #exec(open(launch).read(), {'__file__': launch})
-
+        if "Windows" in platform():
+            if self.shortcut.isChecked():
+                create_windows_shortcut()
         sys.path.append('ainodes-pyside')
         import frontend.startup_new
         print(os.getcwd())
@@ -404,8 +412,6 @@ def reinitUI():
 if __name__ == '__main__':
     #download_model()
     global window
-    if "Windows" in platform():
-        create_windows_shortcut()
     #create_venv('test_venv')
     #activate_venv('test_venv')
     app = QtWidgets.QApplication()
