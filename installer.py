@@ -399,13 +399,13 @@ if __name__ == '__main__':
 │     xxxx     xx   x        x          xx    xxxxx      xxxxxxxxx       xxxxxxxx      xxxxxxxxx    │
 │                                                                                                   │
 │                       Welcome to aiNodes, your Desktop AI Art Generator Suite                     │
-│                                                                                                   │
+│                         featuring Deforum Art Animation and Aesthetic Engine                      │
 │                           Please use the launcher to install dependencies                         │
 │                      and to update the application, download vanilla SD models                    │
 │                                                                                                   │
 │                      Please consider supporting the project via patreon at:                       │
 │                                     www.patreon.com/ainodes                                       │
-│                                                                                                   │
+│                                     www.patreon.com/deforum                                       │
 └───────────────────────────────────────────────────────────────────────────────────────────────────┘
     ''')
     app.exec()
