@@ -4,6 +4,8 @@ import subprocess
 import sys
 import shutil
 import pkg_resources
+from PySide6.QtGui import QIcon
+
 subprocess.run(["pip", "install", "-q", "pyside6"])
 subprocess.run(["pip", "install", "-q", "huggingface-hub"])
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QComboBox, QLineEdit
@@ -150,6 +152,10 @@ class MainWindow(QtWidgets.QWidget):
         layout.addWidget(self.runButton)
 
     def initUI(self):
+        #Set Window title, icon, and stylesheet:
+        self.setWindowTitle("aiNodes Launcher")
+        self.setWindowIcon(QIcon("splash_2.ico"))
+
         # Create a list widget to display the packages
         self.packageList = QtWidgets.QListWidget(self)
         self.install_buttons = {}
@@ -366,6 +372,11 @@ if __name__ == '__main__':
     #activate_venv('test_venv')
     app = QtWidgets.QApplication()
     window = MainWindow()
+    sshFile="QTDark.stylesheet"
+    with open(sshFile,"r") as fh:
+        window.setStyleSheet(fh.read())
+
+
     window.show()
     print('''
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
