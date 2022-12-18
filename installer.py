@@ -357,6 +357,8 @@ def reinitUI():
     window.initUI()
     window.layout().addWidget(window.packageList)
 
+
+
 if __name__ == '__main__':
     #download_model()
     global window
@@ -365,4 +367,34 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication()
     window = MainWindow()
     window.show()
+    print('''
+┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                                   │
+│                        xxxx                                        xx                             │
+│                        xxxxxxx             xxx                     xx                             │
+│                        xxxxxxxx           xxxx                     xx                             │
+│                 x      xxxxxxxx           xxx                     xx                              │
+│                xxx     xxxxxxxxx         xxx                      xx                              │
+│                 x      xxxx xxxx         xxx                      xx      xxxx         xxxx       │
+│                        xxxx  xxxx        xx                      xxx    xxxxxxxx    xxxxxxxxxx    │
+│     xxxxxxx    xx      xxxx   xxxx      xxx   xxxx        xxx    xx    xxx    xxx  xxxx    xxx    │
+│   xxx    xxx    x      xxxx    xxx      xx  xxxxxxxx    xxxxxxx  xx   xx       xx  xxx            │
+│  xx       xx    x      xxxx     xxx    xxx xx     xx  xxx     xxxxx  xxx      xx   xxx   xxxx     │
+│ xxx       xx    x     xxxxx      xxx   xxxxx       xx xx        xxx  xxxx    xxx    xxxxxxxxxx    │
+│ xx         x   xxx    xxxxx       xxx  xx xx       xxxx         xxx xxxxxxxxxx        xxxx   xxx  │
+│ xx        xxxx xxx  xxxxxxxx        xxxxx xx       xxxx        xxxx xx    xx                  xxx │
+│ xxx      xxxxxxxxxxxxxx xxxx         xxxx xx      xxxxxx       xxx  xx         xx  xxx        xx  │
+│  xxxxxxxxxx xxxx xxxx    xxx          xxx xxxxxxxxx   xxxxxxxxxxxx   xxx      xx    xxx     xxx   │
+│     xxxx     xx   x        x          xx    xxxxx      xxxxxxxxx       xxxxxxxx      xxxxxxxxx    │
+│                                                                                                   │
+│                       Welcome to aiNodes, your Desktop AI Art Generator Suite                     │
+│                                                                                                   │
+│                           Please use the launcher to install dependencies                         │
+│                      and to update the application, download vanilla SD models                    │
+│                                                                                                   │
+│                      Please consider supporting the project via patreon at:                       │
+│                                     www.patreon.com/ainodes                                       │
+│                                                                                                   │
+└───────────────────────────────────────────────────────────────────────────────────────────────────┘
+    ''')
     app.exec()
