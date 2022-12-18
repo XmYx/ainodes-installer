@@ -1,6 +1,6 @@
 import os
 import subprocess
-subprocess.run(["pip", "install", "-q", "virtualenv"])
+
 from platform import platform
 
 def create_venv(venv_path):
@@ -13,7 +13,9 @@ def activate_venv(venv_path):
     #exec(open(activate_this).read(), {'__file__': activate_this})
 
 if __name__ == "__main__":
-    if not os.path.exists("test_venv"):
+    subprocess.run(["pip", "install", "-q", "virtualenv"])
+    print(os.path.exists("test_venv"))
+    if os.path.exists("test_venv") == False:
         create_venv("test_venv")
         subprocess.run(["git", "clone", "https://github.com/XmYx/ainodes-pyside"])
     try:
