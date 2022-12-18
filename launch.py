@@ -18,8 +18,10 @@ if __name__ == "__main__":
         subprocess.run(["git", "clone", "https://github.com/XmYx/ainodes-pyside"])
     if 'Windows' in platform():
         python = "test_venv/Scripts/python.exe"
+        activate_this = "test_venv/Scripts/activate_this.py"
     else:
         python = "test_venv/bin/python"
-    activate_this = "test_venv/Scripts/activate_this.py"
+        activate_this = "test_venv/bin/activate_this.py"
+
     exec(open(activate_this).read(), {'__file__': activate_this})
     subprocess.run([python, "installer.py"])
