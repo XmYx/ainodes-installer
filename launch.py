@@ -19,4 +19,3 @@ if __name__ == "__main__":
     activate_this = "test_venv/Scripts/activate_this.py"
     exec(open(activate_this).read(), {'__file__': activate_this})
     subprocess.run([python, "installer.py"])
-

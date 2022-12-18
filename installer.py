@@ -2,11 +2,12 @@ import importlib
 import os
 import subprocess
 import sys
-
+import shutil
 import pkg_resources
 subprocess.run(["pip", "install", "pyside6"])
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QComboBox
-
+subprocess.run(["pip", "install", "huggingface-hub"])
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QComboBox, QLineEdit
+from huggingface_hub import hf_hub_download
 python = sys.executable
 index_url = os.environ.get('INDEX_URL', "")
 
@@ -14,6 +15,11 @@ index_url = os.environ.get('INDEX_URL', "")
 
 from PySide6 import QtWidgets, QtGui
 dir_repos = "ainodes-pyside/src"
+
+
+
+
+
 
 def run_pip(args, desc=None):
     index_url_line = f' --index-url {index_url}' if index_url != '' else ''
@@ -107,29 +113,40 @@ class MainWindow(QtWidgets.QWidget):
 
         # Fetch the list of branches
         output = subprocess.run(["git", "branch", "-a"], capture_output=True).stdout
-        print(output)
         # Split the output into a list of branches
         branches = output.decode().strip().split("\n")
-
+        print(branches)
         # Create the QComboBox
-        self.combo_box = QComboBox()
+        self.branch_select = QComboBox()
 
         # Populate the QComboBox with the list of branches
         x = 0
         for branch in branches:
             if "/" in branch and ">" not in branch:
                 item = branch.split('/')[2]
-                self.combo_box.addItem(item)
+                self.branch_select.addItem(item)
                 if item == 'main':
-                    self.combo_box.setCurrentIndex(x)
+                    self.branch_select.setCurrentIndex(x)
                 x += 1
-
-
         os.chdir("..")
 
+        self.token_label = QLabel("Enter Huggingface Token:")
+        self.token_edit = QLineEdit()
+        self.model_select = QComboBox()
+
+        self.models = ("1.4", "1.5", "2.0 768", "2.1 768", "1.5 Inpaint", "2.0 Inpaint")
+        self.model_select.addItems(self.models)
+        self.model_download = QPushButton("Download Model")
+        self.model_download.clicked.connect(self.download_hf_model)
         layout.addWidget(self.packageList)
         layout.addWidget(self.installButton)
-        layout.addWidget(self.combo_box)
+
+        layout.addWidget(self.token_label)
+        layout.addWidget(self.token_edit)
+        layout.addWidget(self.model_select)
+        layout.addWidget(self.model_download)
+
+        layout.addWidget(self.branch_select)
         layout.addWidget(self.runButton)
 
     def initUI(self):
@@ -174,6 +191,36 @@ class MainWindow(QtWidgets.QWidget):
                 self.packageList.setItemWidget(item, widget)
 
         # Create a button to install all the packages
+
+    def download_hf_model(self):
+
+        model = self.model_select.currentText()
+        if model == "1.4":
+            repo_id = "CompVis/stable-diffusion-v-1-4-original"
+            filename = "sd-v1-4.ckpt"
+        elif model == "1.5":
+            repo_id = "runwayml/stable-diffusion-v1-5"
+            filename = "v1-5-pruned-emaonly.ckpt"
+        elif model == "1.5 Inpaint":
+            repo_id = "runwayml/stable-diffusion-inpainting"
+            filename = "sd-v1-5-inpainting.ckpt"
+        elif model == "2.0 768":
+            repo_id = "stabilityai/stable-diffusion-2"
+            filename = "768-v-ema.ckpt"
+        elif model == "2.0 Inpaint":
+            repo_id = "stabilityai/stable-diffusion-2-inpainting"
+            filename = "512-inpainting-ema.ckpt"
+        elif model == "2.1 768":
+            repo_id = "stabilityai/stable-diffusion-2-1"
+            filename = "v2-1_768-ema-pruned.ckpt"
+
+        downloaded_model_path = hf_hub_download(repo_id=repo_id, filename=filename,
+                                                use_auth_token=self.token_edit.text(),
+                                                cache_dir='ainodes-pyside/data/models')
+        destpath = os.path.join("ainodes-pyside/data/models", filename)
+        shutil.move(downloaded_model_path, destpath)
+        print(downloaded_model_path)
+
     def install_package(self):
         python = "python"
         button = self.sender()
@@ -185,6 +232,11 @@ class MainWindow(QtWidgets.QWidget):
             run(f'{torch_command}', "Installing torch and torchvision", "Couldn't install torch")
         elif 'xformers' in requirement:
             subprocess.run(["pip", "install", "xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
+        elif 'ainodes' in requirement:
+            if not os.path.exists("ainodes-pyside"):
+                subprocess.run(["git", "clone", "https://github.com/XmYx/ainodes-pyside"])
+            else:
+                self.update_ainodes()
         else:
             subprocess.run(["pip", "install", requirement, "--upgrade"])
         #reinitUI()
@@ -192,6 +244,14 @@ class MainWindow(QtWidgets.QWidget):
         print(f"Launching SD UI")
         #launch = 'frontend/main_app.py'
         #exec(open(launch).read(), {'__file__': launch})
+
+        sys.path.append('ainodes-pyside')
+        import frontend.startup_new
+        os.chdir("ainodes-pyside")
+        frontend.startup_new.run_app()
+
+    def update_ainodes(self):
+
         os.chdir("ainodes-pyside")
         branch = self.combo_box.currentText()
 
@@ -204,11 +264,7 @@ class MainWindow(QtWidgets.QWidget):
         subprocess.run(["git", "checkout", branch])
         # Run the git pull command
         subprocess.run(["git", "pull"])
-        #os.chdir("..")
-
-        sys.path.append('../ainodes-pyside')
-        import frontend.startup_new
-        frontend.startup_new.run_app()
+        os.chdir("..")
 
     def isPackageInstalled(self, package):
         """Returns True if the given package is installed, False otherwise."""
@@ -293,6 +349,7 @@ def reinitUI():
     window.layout().addWidget(window.packageList)
 
 if __name__ == '__main__':
+    #download_model()
     global window
     #create_venv('test_venv')
     #activate_venv('test_venv')
