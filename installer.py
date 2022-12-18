@@ -30,6 +30,7 @@ def create_windows_shortcut():
         os.chdir("..")
 
     subprocess.run(["pip", "install", "-q", "pypiwin32"])
+    subprocess.run(["pip", "install", "-q", "pywin32"])
     import win32com.client
 
     # Set the path to the file or directory that you want to create a shortcut for
