@@ -240,7 +240,7 @@ class MainWindow(QtWidgets.QWidget):
         requirement = self.install_buttons[button]
         if 'torch' in requirement:
             torch_command = os.environ.get('TORCH_COMMAND',
-                                           "pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117")
+                                           "pip install torch==1.13.0+cu117 torchvision==0.14.0+cu117 --extra-index-url https://download.pytorch.org/whl/cu117")
 
             run(f'{torch_command}', "Installing torch and torchvision", "Couldn't install torch")
         elif 'xformers' in requirement:
@@ -295,7 +295,7 @@ class MainWindow(QtWidgets.QWidget):
 
         """Installs all the packages listed in the requirements.txt file."""
         torch_command = os.environ.get('TORCH_COMMAND',
-                                       "pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117")
+                                       "pip install torch==1.13.0+cu117 torchvision==0.14.0+cu117 --extra-index-url https://download.pytorch.org/whl/cu117")
 
         run(f'{torch_command}', "Installing torch and torchvision", "Couldn't install torch")
 
