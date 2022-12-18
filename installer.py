@@ -206,7 +206,7 @@ class MainWindow(QtWidgets.QWidget):
             filename = "v1-5-pruned-emaonly.ckpt"
         elif model == "1.5 Inpaint":
             repo_id = "runwayml/stable-diffusion-inpainting"
-            filename = "sd-v1-5-inpainting.ckpt"
+            filename = "sd-v1-5-inpaint.ckpt"
         elif model == "2.0 768":
             repo_id = "stabilityai/stable-diffusion-2"
             filename = "768-v-ema.ckpt"
@@ -217,12 +217,15 @@ class MainWindow(QtWidgets.QWidget):
             repo_id = "stabilityai/stable-diffusion-2-1"
             filename = "v2-1_768-ema-pruned.ckpt"
 
-        downloaded_model_path = hf_hub_download(repo_id=repo_id, filename=filename,
-                                                use_auth_token=self.token_edit.text(),
-                                                cache_dir='ainodes-pyside/data/models')
         destpath = os.path.join("ainodes-pyside/data/models", filename)
-        shutil.move(downloaded_model_path, destpath)
-        print(downloaded_model_path)
+        if not os.path.exists(destpath):
+            downloaded_model_path = hf_hub_download(repo_id=repo_id, filename=filename,
+                                                    use_auth_token=self.token_edit.text(),
+                                                    cache_dir='ainodes-pyside/data/models')
+            shutil.move(downloaded_model_path, destpath)
+            print(downloaded_model_path)
+        else:
+            print(f"{destpath} already exists")
 
     def install_package(self):
         python = "python"
