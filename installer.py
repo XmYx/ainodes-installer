@@ -341,7 +341,10 @@ class MainWindow(QtWidgets.QWidget):
                 "deepdanbooru")
 
         try:
-            subprocess.run(["pip", "install", "xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
+            if 'Windows' in platform():
+                subprocess.run(["pip", "install", "xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
+            else:
+                subprocess.run(["pip", "install", "xformers"])
         except:
             pass
 
