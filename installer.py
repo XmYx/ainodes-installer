@@ -306,7 +306,7 @@ class MainWindow(QtWidgets.QWidget):
     def update_ainodes(self):
 
         os.chdir("ainodes-pyside")
-        branch = self.combo_box.currentText()
+        branch = self.branch_select.currentText()
 
         if '/' in branch:
             branch = branch.split('/')[2]
