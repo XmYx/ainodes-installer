@@ -28,11 +28,18 @@ dir_repos = "ainodes-pyside/src"
 def create_windows_shortcut():
     if "ainodes-pyside" in os.getcwd():
         os.chdir("..")
-
-    subprocess.run(["pip", "install", "-q", "pypiwin32"])
-    subprocess.run(["pip", "install", "-q", "pywin32"])
-    import win32com.client
-
+    try:
+        subprocess.run(["pip", "install", "-q", "pypiwin32"])
+    except:
+        pass
+    try:
+        subprocess.run(["pip", "install", "-q", "pywin32"])
+    except:
+        pass
+    try:
+        import win32com.client
+    except:
+        return
     # Set the path to the file or directory that you want to create a shortcut for
 
     target = os.path.join(os.getcwd(), "start.bat")
@@ -399,7 +406,7 @@ class MainWindow(QtWidgets.QWidget):
                 subprocess.run(["pip", "install", "xformers"])
         except:
             pass
-
+        restart_app()
 def reinitUI():
     global window
     #window.destroy()
@@ -409,7 +416,12 @@ def reinitUI():
     window.initUI()
     window.layout().addWidget(window.packageList)
 
+def restart_app():
+    # Close the current application
+    app.closeAllWindows()
 
+    # Re-start the application
+    os.execv(sys.executable, [sys.executable] + sys.argv)
 
 if __name__ == '__main__':
     #download_model()
@@ -424,6 +436,7 @@ if __name__ == '__main__':
 
 
     window.show()
+
     print('''
 ┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                                                                                   │
