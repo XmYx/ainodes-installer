@@ -4,9 +4,10 @@ import subprocess
 import sys
 import shutil
 import pkg_resources
-from PySide6.QtGui import QIcon
+
 
 subprocess.run(["pip", "install", "-q", "pyside6"])
+from PySide6.QtGui import QIcon
 subprocess.run(["pip", "install", "-q", "huggingface-hub"])
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QComboBox, QLineEdit, QCheckBox
 from huggingface_hub import hf_hub_download
