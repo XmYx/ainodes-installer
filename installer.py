@@ -10,6 +10,9 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QComboB
 from huggingface_hub import hf_hub_download
 python = sys.executable
 index_url = os.environ.get('INDEX_URL', "")
+from platform import platform
+print(platform())
+
 
 
 
@@ -231,7 +234,10 @@ class MainWindow(QtWidgets.QWidget):
 
             run(f'{torch_command}', "Installing torch and torchvision", "Couldn't install torch")
         elif 'xformers' in requirement:
-            subprocess.run(["pip", "install", "xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
+            if 'Windows' in platform():
+                subprocess.run(["pip", "install", "xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
+            else:
+                subprocess.run(["pip", "install", "xformers"])
         elif 'ainodes' in requirement:
             if not os.path.exists("ainodes-pyside"):
                 subprocess.run(["git", "clone", "https://github.com/XmYx/ainodes-pyside"])
