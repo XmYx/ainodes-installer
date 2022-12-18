@@ -4,14 +4,14 @@ import subprocess
 import sys
 import shutil
 import pkg_resources
-subprocess.run(["pip", "install", "pyside6"])
-subprocess.run(["pip", "install", "huggingface-hub"])
+subprocess.run(["pip", "install", "-q", "pyside6"])
+subprocess.run(["pip", "install", "-q", "huggingface-hub"])
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel, QComboBox, QLineEdit
 from huggingface_hub import hf_hub_download
 python = sys.executable
 index_url = os.environ.get('INDEX_URL', "")
 from platform import platform
-print(platform())
+#print(platform())
 
 
 
@@ -94,9 +94,6 @@ def is_package_installed(package_name):
 def activate_venv(venv_path):
     activate_this = os.path.join(venv_path, "Scripts", "activate.bat")
     subprocess.run([activate_this])
-    print(is_package_installed("k-diffusion"))
-    python = "test_venv/Scripts/python.exe"
-    print(subprocess.run([python, "--version"]))
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
@@ -118,7 +115,7 @@ class MainWindow(QtWidgets.QWidget):
         output = subprocess.run(["git", "branch", "-a"], capture_output=True).stdout
         # Split the output into a list of branches
         branches = output.decode().strip().split("\n")
-        print(branches)
+        #print(branches)
         # Create the QComboBox
         self.branch_select = QComboBox()
 
@@ -368,4 +365,4 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication()
     window = MainWindow()
     window.show()
-    app.exec_()
+    app.exec()

@@ -1,6 +1,6 @@
 import os
 import subprocess
-subprocess.run(["pip", "install", "virtualenv"])
+subprocess.run(["pip", "install", "-q", "virtualenv"])
 from platform import platform
 
 def create_venv(venv_path):
