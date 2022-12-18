@@ -199,7 +199,8 @@ class MainWindow(QtWidgets.QWidget):
         # Create a button to install all the packages
 
     def download_hf_model(self):
-
+        if "ainodes-pyside" in os.getcwd():
+            os.chdir("..")
         model = self.model_select.currentText()
         if model == "1.4":
             repo_id = "CompVis/stable-diffusion-v-1-4-original"
@@ -231,6 +232,9 @@ class MainWindow(QtWidgets.QWidget):
             print(f"{destpath} already exists")
 
     def install_package(self):
+        if "ainodes-pyside" in os.getcwd():
+            os.chdir("..")
+
         python = "python"
         button = self.sender()
         requirement = self.install_buttons[button]
@@ -259,7 +263,9 @@ class MainWindow(QtWidgets.QWidget):
 
         sys.path.append('ainodes-pyside')
         import frontend.startup_new
-        os.chdir("ainodes-pyside")
+        print(os.getcwd())
+        if "ainodes-pyside" not in os.getcwd():
+            os.chdir("ainodes-pyside")
         frontend.startup_new.run_app()
 
     def update_ainodes(self):
@@ -276,6 +282,7 @@ class MainWindow(QtWidgets.QWidget):
         subprocess.run(["git", "checkout", branch])
         # Run the git pull command
         subprocess.run(["git", "pull"])
+
         os.chdir("..")
 
     def isPackageInstalled(self, package):
@@ -283,6 +290,9 @@ class MainWindow(QtWidgets.QWidget):
         installed = subprocess.run(["pip", "freeze"], capture_output=True)
         return installed
     def installPackages(self):
+        if "ainodes-pyside" in os.getcwd():
+            os.chdir("..")
+
         """Installs all the packages listed in the requirements.txt file."""
         torch_command = os.environ.get('TORCH_COMMAND',
                                        "pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 --extra-index-url https://download.pytorch.org/whl/cu117")
