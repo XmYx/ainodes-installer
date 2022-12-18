@@ -139,9 +139,9 @@ class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
-        self.initUI()
+        #self.initUI()
 
-        self.installButton = QtWidgets.QPushButton('Install All', self)
+        self.installButton = QtWidgets.QPushButton('Install / Update All', self)
         self.installButton.clicked.connect(self.installPackages)
 
         self.runButton = QtWidgets.QPushButton('Run aiNodes', self)
@@ -150,7 +150,8 @@ class MainWindow(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout(self)
 
         os.chdir("ainodes-pyside")
-
+        self.setWindowTitle("aiNodes Launcher")
+        self.setWindowIcon(QIcon("splash_2.ico"))
         # Fetch the list of branches
         output = subprocess.run(["git", "branch", "-a"], capture_output=True).stdout
         # Split the output into a list of branches
@@ -179,7 +180,7 @@ class MainWindow(QtWidgets.QWidget):
         self.model_download = QPushButton("Download Model")
         self.model_download.clicked.connect(self.download_hf_model)
         self.shortcut = QCheckBox("Create Desktop shortcut")
-        layout.addWidget(self.packageList)
+        #layout.addWidget(self.packageList)
         layout.addWidget(self.installButton)
 
         layout.addWidget(self.token_label)
@@ -194,8 +195,6 @@ class MainWindow(QtWidgets.QWidget):
 
     def initUI(self):
         #Set Window title, icon, and stylesheet:
-        self.setWindowTitle("aiNodes Launcher")
-        self.setWindowIcon(QIcon("splash_2.ico"))
 
         # Create a list widget to display the packages
         self.packageList = QtWidgets.QListWidget(self)
@@ -204,7 +203,6 @@ class MainWindow(QtWidgets.QWidget):
         with open('requirements_versions.txt', 'r') as f:
             for line in f:
                 package = line.strip()
-                item = QtWidgets.QListWidgetItem()
                 #print(package.split('==')[0])
                 # Check if the package is installed and set the item's color accordingly
                 #if self.isPackageInstalled(package.split('==')[0]):
@@ -212,7 +210,7 @@ class MainWindow(QtWidgets.QWidget):
                 #else:
                 #    item.setForeground(QtGui.QColor('red'))
 
-
+                item = QtWidgets.QListWidgetItem()
                 widget = QWidget()
                 layout = QHBoxLayout()
                 widget.setLayout(layout)
@@ -221,16 +219,20 @@ class MainWindow(QtWidgets.QWidget):
                 button.setMaximumWidth(200)
                 button.clicked.connect(self.install_package)
                 self.install_buttons[button] = package
-
                 layout.addWidget(label)
                 item.setSizeHint(widget.sizeHint())
 
                 if is_package_installed(package.split('==')[0]):
                     item.setForeground(QtGui.QColor('green'))
                     button.setText("Reinstall")
+                    button.setStyleSheet("background-color: green")
+                    layout.addWidget(button)
+                elif package == 'ainodes':
+                    button.setText("Update")
                     layout.addWidget(button)
                 else:
                     item.setForeground(QtGui.QColor('red'))
+                    button.setStyleSheet("background-color: red")
                     layout.addWidget(button)
 
 
@@ -275,7 +277,7 @@ class MainWindow(QtWidgets.QWidget):
     def install_package(self):
         if "ainodes-pyside" in os.getcwd():
             os.chdir("..")
-
+        print(self.sender())
         python = "python"
         button = self.sender()
         requirement = self.install_buttons[button]
@@ -296,7 +298,38 @@ class MainWindow(QtWidgets.QWidget):
                 self.update_ainodes()
         else:
             subprocess.run(["pip", "install", requirement, "--upgrade"])
-        #reinitUI()
+
+        print(self.install_buttons[button])
+        selected_item = self.packageList.currentItem()
+
+        # Replace the selected item with the new item
+        self.packageList.takeItem(self.packageList.row(selected_item))
+        item = QtWidgets.QListWidgetItem()
+        widget = QWidget()
+        layout = QHBoxLayout()
+        widget.setLayout(layout)
+        label = QLabel(requirement)
+        button = QPushButton("Install")
+        button.setMaximumWidth(200)
+        button.clicked.connect(self.install_package)
+        self.install_buttons[button] = requirement
+        layout.addWidget(label)
+        item.setSizeHint(widget.sizeHint())
+
+        if is_package_installed(requirement.split('==')[0]):
+            item.setForeground(QtGui.QColor('green'))
+            button.setText("Reinstall")
+            button.setStyleSheet("background-color: green")
+            layout.addWidget(button)
+        elif requirement == 'ainodes':
+            button.setText("Update")
+            layout.addWidget(button)
+        else:
+            item.setForeground(QtGui.QColor('red'))
+            button.setStyleSheet("background-color: red")
+            layout.addWidget(button)
+
+        self.packageList.insertItem(self.packageList.row(selected_item), item)        #reinitUI()
     def run_aiNodes(self):
         print(f"Launching SD UI")
         #launch = 'frontend/main_app.py'
