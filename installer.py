@@ -406,7 +406,7 @@ class MainWindow(QtWidgets.QWidget):
                 subprocess.run(["pip", "install", "xformers"])
         except:
             pass
-        restart_app()
+        #restart_app()
 def reinitUI():
     global window
     #window.destroy()
