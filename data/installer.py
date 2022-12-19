@@ -408,6 +408,8 @@ class MainWindow(QtWidgets.QWidget):
         impro_aesthetic_repo = os.environ.get('IMPRO_AESTHETIC_REPO', 'https://github.com/christophschuhmann/improved-aesthetic-predictor.git')
         volta_ml_repo = os.environ.get('VOLTA_ML_REPO', 'https://github.com/VoltaML/voltaML-fast-stable-diffusion.git')
 
+        lavis_repo = os.environ.get('LAVIS_REPO', 'https://github.com/salesforce/LAVIS.git')
+        lavis_commit_hash = os.environ.get('LAVIS_COMMIT_HASH', '8a261e309a413c2f426243151a450f9792283f67')
         stable_diffusion_commit_hash = os.environ.get('STABLE_DIFFUSION_COMMIT_HASH', "69ae4b35e0a0f6ee1af8bb9a5d0016ccb27e36dc")
         taming_transformers_commit_hash = os.environ.get('TAMING_TRANSFORMERS_COMMIT_HASH', "24268930bf1dce879235a7fddd0b2355b84d7ea6")
         k_diffusion_commit_hash = os.environ.get('K_DIFFUSION_COMMIT_HASH', "5b3af030dd83e0297272d861c19477735d0317ec")
@@ -430,6 +432,7 @@ class MainWindow(QtWidgets.QWidget):
         git_clone(midas_repo, repo_dir('MiDaS'), "MiDaS", midas_commit_hash)
         git_clone(pytorch_lite_repo, repo_dir('pytorch3d-lite'), "pytorch3d-lite", pytorch_litet_hash)
         git_clone(impro_aesthetic_repo, repo_dir('improved-aesthetic-predictor'), "improved-aesthetic-predictor", impro_aesthetic_hash)
+        git_clone(lavis_repo, repo_dir('lavis'), "lavis", lavis_commit_hash)
         #git_clone(volta_ml_repo, repo_dir('volta-ml'), "volta-ml", volta_ml_hash)
 
         if not is_installed("lpips"):
