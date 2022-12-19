@@ -279,9 +279,9 @@ class MainWindow(QtWidgets.QWidget):
         if not os.path.exists(destpath):
             downloaded_model_path = hf_hub_download(repo_id=repo_id, filename=filename,
                                                     use_auth_token=self.token_edit.text(),
-                                                    cache_dir='ainodes-pyside/data/models')
-            shutil.move(downloaded_model_path, destpath)
-            print(downloaded_model_path)
+                                                    cache_dir='ainodes-pyside/data/models',
+                                                    )
+            shutil.copy(downloaded_model_path, destpath)
         else:
             print(f"{destpath} already exists")
 
@@ -438,6 +438,7 @@ class MainWindow(QtWidgets.QWidget):
         if not is_installed("lpips"):
             run_pip(f"install -r {os.path.join(repo_dir('CodeFormer'), 'requirements.txt')}", "requirements for CodeFormer")
         if not is_installed("gfpgan"):
+            run_pip(f"install {gfpgan_package}", "gfpgan")
             run_pip(f"install {gfpgan_package}", "gfpgan")
 
         if not is_installed("clip"):
