@@ -43,7 +43,7 @@ def create_windows_shortcut():
         return
     # Set the path to the file or directory that you want to create a shortcut for
 
-    target = os.path.join(os.getcwd(), "start.bat")
+    target = os.path.join(os.getcwd(), "launch.exe")
 
 
     # Create the shortcut
@@ -145,14 +145,12 @@ class MainWindow(QtWidgets.QWidget):
         self.installButton = QtWidgets.QPushButton('Install / Update All', self)
         self.installButton.clicked.connect(self.installPackages)
 
-        self.runButton = QtWidgets.QPushButton('Run aiNodes', self)
-        self.runButton.clicked.connect(self.run_aiNodes)
         # Create a layout to hold the list widget and button
         layout = QtWidgets.QVBoxLayout(self)
 
         os.chdir("ainodes-pyside")
         self.setWindowTitle("aiNodes Launcher")
-        self.setWindowIcon(QIcon("splash_2.ico"))
+        self.setWindowIcon(QIcon("data/splash_2.ico"))
         # Fetch the list of branches
         output = subprocess.run(["git", "branch", "-a"], capture_output=True).stdout
         # Split the output into a list of branches
@@ -192,8 +190,20 @@ class MainWindow(QtWidgets.QWidget):
         layout.addWidget(self.branch_select)
         if "Windows" in platform():
             layout.addWidget(self.shortcut)
-        layout.addWidget(self.runButton)
+        if self.check_if_ainodes_can_start() == True:
+            self.runButton = QtWidgets.QPushButton('Run aiNodes', self)
+            self.runButton.clicked.connect(self.run_aiNodes)
+            layout.addWidget(self.runButton)
         self.branch_select.currentIndexChanged.connect(self.update_ainodes)
+    def check_if_ainodes_can_start(self):
+        can_start = True
+        with open('data/requirements.txt', 'r') as f:
+            for line in f:
+                package = line.strip()
+                if not is_package_installed(package.split('==')[0]):
+                    can_start = False
+        return can_start
+
     def initUI(self):
         #Set Window title, icon, and stylesheet:
 
@@ -201,7 +211,7 @@ class MainWindow(QtWidgets.QWidget):
         self.packageList = QtWidgets.QListWidget(self)
         self.install_buttons = {}
         # Read the requirements.txt file and add each package to the list widget
-        with open('requirements_versions.txt', 'r') as f:
+        with open('data/requirements_versions.txt', 'r') as f:
             for line in f:
                 package = line.strip()
                 #print(package.split('==')[0])
@@ -377,7 +387,7 @@ class MainWindow(QtWidgets.QWidget):
 
         run(f'{torch_command}', "Installing torch and torchvision", "Couldn't install torch")
 
-        subprocess.run(['pip', 'install', "--extra-index-url", "https://download.pytorch.org/whl/cu117", '-r', 'requirements.txt'])
+        subprocess.run(['pip', 'install', "--extra-index-url", "https://download.pytorch.org/whl/cu117", '-r', 'data/requirements.txt'])
 
         gfpgan_package = os.environ.get('GFPGAN_PACKAGE', "git+https://github.com/TencentARC/GFPGAN.git@8d2447a2d918f8eba5a4a01463fd48e45126a379")
         clip_package = os.environ.get('CLIP_PACKAGE', "git+https://github.com/openai/CLIP.git@d50d76daa670286dd6cacf3bcd80b5e4823fc8e1")
@@ -436,7 +446,7 @@ class MainWindow(QtWidgets.QWidget):
 
         try:
             if 'Windows' in platform():
-                subprocess.run(["pip", "install", "xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
+                subprocess.run(["pip", "install", "data/xformers-0.0.15.dev0+4601d9d.d20221216-cp310-cp310-win_amd64.whl"])
             else:
                 subprocess.run(["pip", "install", "xformers"])
         except:
@@ -453,9 +463,9 @@ def reinitUI():
 
 def restart_app():
     # Re-start the application
-    activate_this = "launch.py"
+    activate_this = "launch.exe"
     app.closeAllWindows()
-    subprocess.run([python, activate_this])
+    subprocess.run([activate_this])
 
 
 if __name__ == '__main__':
@@ -465,7 +475,7 @@ if __name__ == '__main__':
     #activate_venv('test_venv')
     app = QtWidgets.QApplication()
     window = MainWindow()
-    sshFile="QTDark.stylesheet"
+    sshFile="data/QTDark.stylesheet"
     with open(sshFile,"r") as fh:
         window.setStyleSheet(fh.read())
 

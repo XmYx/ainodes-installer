@@ -25,7 +25,7 @@ if __name__ == "__main__":
         pass
 
     if 'Windows' in platform():
-        python = "test_venv/Scripts/python.exe"
+        python = "test_venv/Scripts/pythonw.exe"
         activate_this = os.path.join(os.path.dirname(os.path.abspath(__file__)) + "/test_venv/Scripts/activate_this.py")
     else:
         python = "test_venv/bin/python"
