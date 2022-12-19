@@ -6,6 +6,7 @@ import shutil
 import pkg_resources
 
 
+
 subprocess.run(["pip", "install", "-q", "pyside6"])
 from PySide6.QtGui import QIcon
 subprocess.run(["pip", "install", "-q", "huggingface-hub"])
@@ -192,7 +193,7 @@ class MainWindow(QtWidgets.QWidget):
         if "Windows" in platform():
             layout.addWidget(self.shortcut)
         layout.addWidget(self.runButton)
-
+        self.branch_select.currentIndexChanged.connect(self.update_ainodes)
     def initUI(self):
         #Set Window title, icon, and stylesheet:
 
@@ -338,6 +339,7 @@ class MainWindow(QtWidgets.QWidget):
             if self.shortcut.isChecked():
                 create_windows_shortcut()
         sys.path.append('ainodes-pyside')
+
         import frontend.startup_new
         print(os.getcwd())
         if "ainodes-pyside" not in os.getcwd():
