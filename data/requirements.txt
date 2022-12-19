@@ -120,6 +120,9 @@ transformers
 diffusers
 safetensors
 k-diffusion
+ftfy
+bitsandbytes
+natsort
 iopath
 decord
 webdataset

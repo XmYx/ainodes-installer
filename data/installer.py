@@ -16,7 +16,8 @@ python = sys.executable
 index_url = os.environ.get('INDEX_URL', "")
 from platform import platform
 #print(platform())
-
+os.makedirs('pip_cache', exist_ok=True)
+os.putenv("PIP_CACHE_DIR", "pip_cache")
 
 
 
