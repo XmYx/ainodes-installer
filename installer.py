@@ -441,7 +441,7 @@ class MainWindow(QtWidgets.QWidget):
                 subprocess.run(["pip", "install", "xformers"])
         except:
             pass
-        #restart_app()
+        restart_app()
 def reinitUI():
     global window
     #window.destroy()
@@ -452,11 +452,11 @@ def reinitUI():
     window.layout().addWidget(window.packageList)
 
 def restart_app():
-    # Close the current application
-    app.closeAllWindows()
-
     # Re-start the application
-    os.execv(sys.executable, [sys.executable] + sys.argv)
+    activate_this = "launch.py"
+    app.closeAllWindows()
+    subprocess.run([python, activate_this])
+
 
 if __name__ == '__main__':
     #download_model()
