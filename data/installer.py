@@ -265,7 +265,7 @@ class MainWindow(QtWidgets.QWidget):
             filename = "v1-5-pruned-emaonly.ckpt"
         elif model == "1.5 Inpaint":
             repo_id = "runwayml/stable-diffusion-inpainting"
-            filename = "sd-v1-5-inpaint.ckpt"
+            filename = "sd-v1-5-inpainting.ckpt"
         elif model == "2.0 512":
             repo_id = "stabilityai/stable-diffusion-2-base"
             filename = "512-base-ema.ckpt"
