@@ -15,15 +15,22 @@ def activate_venv(venv_path):
 
 if __name__ == "__main__":
     subprocess.run(["pip", "install", "-q", "virtualenv"])
-    print(os.path.exists("test_venv"))
+    url = 'https://raw.githubusercontent.com/XmYx/ainodes-installer/main/data/installer.py'
+    path = 'data/installer.py'
+    subprocess.run(["curl", "-L", url, "-o", path])
+    url = 'https://raw.githubusercontent.com/XmYx/ainodes-installer/main/data/requirements.txt'
+    path = 'data/requirements.txt'
+    subprocess.run(["curl", "-L", url, "-o", path])
+
+    #print(os.path.exists("test_venv"))
     if os.path.exists("test_venv") == False:
         create_venv("test_venv")
     if os.path.exists("ainodes-pyside") == False:
         subprocess.run(["git", "clone", "https://github.com/XmYx/ainodes-pyside"])
-    try:
-        subprocess.run(["git", "pull"])
-    except:
-        pass
+    #try:
+    #    subprocess.run(["git", "pull"])
+    #except:
+    #    pass
 
     if 'Windows' in platform():
         python = "test_venv/Scripts/python.exe"
