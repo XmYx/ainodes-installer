@@ -4,8 +4,7 @@ import subprocess
 import sys
 import shutil
 import pkg_resources
-
-
+from PySide6.QtQuick import QSGRendererInterface
 
 subprocess.run(["pip", "install", "-q", "pyside6"])
 from PySide6.QtGui import QIcon
@@ -21,7 +20,8 @@ os.putenv("PIP_CACHE_DIR", "pip_cache")
 
 
 
-from PySide6 import QtWidgets, QtGui
+from PySide6 import QtWidgets, QtGui, QtCore, QtQuick
+
 dir_repos = "ainodes-pyside/src"
 
 
@@ -478,6 +478,9 @@ if __name__ == '__main__':
     global window
     #create_venv('test_venv')
     #activate_venv('test_venv')
+    QtCore.QCoreApplication.setAttribute(QtCore.Qt.ApplicationAttribute.AA_ShareOpenGLContexts)
+    QtQuick.QQuickWindow.setGraphicsApi(QSGRendererInterface.OpenGLRhi)
+
     app = QtWidgets.QApplication()
     window = MainWindow()
     sshFile="data/QTDark.stylesheet"

@@ -128,3 +128,4 @@ decord
 webdataset
 pycocoevalcap
 fire
+bs4
