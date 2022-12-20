@@ -175,7 +175,7 @@ class MainWindow(QtWidgets.QWidget):
         self.token_edit = QLineEdit()
         self.model_select = QComboBox()
 
-        self.models = ("1.4", "1.5", "2.0 768", "2.1 768", "1.5 Inpaint", "2.0 Inpaint")
+        self.models = ("1.4", "1.5", "2.0 512", "2.0 768", "2.1 512", "2.1 768", "1.5 Inpaint", "2.0 Inpaint")
         self.model_select.addItems(self.models)
         self.model_download = QPushButton("Download Model")
         self.model_download.clicked.connect(self.download_hf_model)
@@ -266,12 +266,18 @@ class MainWindow(QtWidgets.QWidget):
         elif model == "1.5 Inpaint":
             repo_id = "runwayml/stable-diffusion-inpainting"
             filename = "sd-v1-5-inpaint.ckpt"
+        elif model == "2.0 512":
+            repo_id = "stabilityai/stable-diffusion-2-base"
+            filename = "512-base-ema.ckpt"
         elif model == "2.0 768":
             repo_id = "stabilityai/stable-diffusion-2"
             filename = "768-v-ema.ckpt"
         elif model == "2.0 Inpaint":
             repo_id = "stabilityai/stable-diffusion-2-inpainting"
             filename = "512-inpainting-ema.ckpt"
+        elif model == "2.1 512":
+            repo_id = "stabilityai/stable-diffusion-2-1-base"
+            filename = "v2-1_512-ema-pruned.ckpt"
         elif model == "2.1 768":
             repo_id = "stabilityai/stable-diffusion-2-1"
             filename = "v2-1_768-ema-pruned.ckpt"
@@ -283,6 +289,15 @@ class MainWindow(QtWidgets.QWidget):
                                                     cache_dir='ainodes-pyside/data/models',
                                                     )
             shutil.copy(downloaded_model_path, destpath)
+            try:
+                os.remove(downloaded_model_path)
+            except:
+                pass
+            try:
+            # Remove the symlink
+                os.unlink(downloaded_model_path)
+            except:
+                pass
         else:
             print(f"{destpath} already exists")
 
@@ -352,11 +367,13 @@ class MainWindow(QtWidgets.QWidget):
         sys.path.append('ainodes-pyside')
 
         import frontend.startup_new
-        print(os.getcwd())
+        #print(os.getcwd())
         if "ainodes-pyside" not in os.getcwd():
             os.chdir("ainodes-pyside")
+        #subprocess.run(["python", "frontend/main_app.py"])
         frontend.startup_new.run_app()
-
+        #launch = 'frontend/main_app.py'
+        #exec(open(launch).read(), {'__file__': launch})
     def update_ainodes(self):
         if "ainodes-pyside" not in os.getcwd():
             os.chdir("ainodes-pyside")
@@ -478,8 +495,8 @@ if __name__ == '__main__':
     global window
     #create_venv('test_venv')
     #activate_venv('test_venv')
-    QtCore.QCoreApplication.setAttribute(QtCore.Qt.ApplicationAttribute.AA_ShareOpenGLContexts)
-    QtQuick.QQuickWindow.setGraphicsApi(QSGRendererInterface.OpenGLRhi)
+    #QtCore.QCoreApplication.setAttribute(QtCore.Qt.ApplicationAttribute.AA_ShareOpenGLContexts)
+    #QtQuick.QQuickWindow.setGraphicsApi(QSGRendererInterface.OpenGLRhi)
 
     app = QtWidgets.QApplication()
     window = MainWindow()
