@@ -358,8 +358,8 @@ class MainWindow(QtWidgets.QWidget):
         frontend.startup_new.run_app()
 
     def update_ainodes(self):
-
-        os.chdir("ainodes-pyside")
+        if "ainodes-pyside" not in os.getcwd():
+            os.chdir("ainodes-pyside")
         branch = self.branch_select.currentText()
 
         if '/' in branch:
