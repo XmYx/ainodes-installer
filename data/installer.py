@@ -399,6 +399,24 @@ class MainWindow(QtWidgets.QWidget):
         if "ainodes-pyside" in os.getcwd():
             os.chdir("..")
 
+        if not os.path.exists("ainodes-pyside/ffmpeg.exe"):
+            try:
+                subprocess.run(["pip", "install", "pyunpack"])
+                subprocess.run(["pip", "install", "patool"])
+                url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-git-full.7z"
+                subprocess.run(["curl", "-L", url, "-o", "ffmpeg.7z"])
+                import pyunpack
+                # Open the 7zip file
+                archive = pyunpack.Archive("ffmpeg.7z")
+                # Extract all the files to the current directory
+                archive.extractall("")
+                shutil.move('ffmpeg-2022-12-19-git-48d5aecfc4-full_build/bin/ffmpeg.exe', 'aiinodes-pyside/src/ffmpeg.exe')
+                shutil.rmtree('ffmpeg-2022-12-19-git-48d5aecfc4-full_build')
+                os.remove('ffmpeg.7z')
+            except:
+                print("Please install 7zip to auto-download ffmpeg, or set it's path manually in settings.")
+                pass
+            #subprocess.run(["cmd.exe", "rm", "ffmpeg.7z"])
         """Installs all the packages listed in the requirements.txt file."""
         torch_command = os.environ.get('TORCH_COMMAND',
                                        "pip install torch==1.13.0+cu117 torchvision==0.14.0+cu117 --extra-index-url https://download.pytorch.org/whl/cu117")
