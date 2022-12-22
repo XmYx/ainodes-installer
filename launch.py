@@ -27,10 +27,10 @@ if __name__ == "__main__":
         create_venv("test_venv")
     if os.path.exists("ainodes-pyside") == False:
         subprocess.run(["git", "clone", "https://github.com/XmYx/ainodes-pyside"])
-    #try:
-    #    subprocess.run(["git", "pull"])
-    #except:
-    #    pass
+    try:
+        subprocess.run(["git", "pull"])
+    except:
+        pass
 
     if 'Windows' in platform():
         python = "test_venv/Scripts/python.exe"
