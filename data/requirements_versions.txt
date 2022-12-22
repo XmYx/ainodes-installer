@@ -56,7 +56,6 @@ pyasn1
 wcwidth
 six
 atomicwrites
-pyinstaller
 lmdb
 urwid
 colorama
