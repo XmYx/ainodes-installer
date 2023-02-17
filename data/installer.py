@@ -75,6 +75,7 @@ def is_installed(package):
     try:
         spec = importlib.util.find_spec(package)
     except ModuleNotFoundError:
+        print(f"missing {package}")
         return False
 
     return spec is not None
@@ -202,6 +203,7 @@ class MainWindow(QtWidgets.QWidget):
             for line in f:
                 package = line.strip()
                 if not is_package_installed(package.split('==')[0]):
+                    print(package)
                     can_start = False
         return can_start
 
@@ -310,7 +312,7 @@ class MainWindow(QtWidgets.QWidget):
         requirement = self.install_buttons[button]
         if 'torch' in requirement:
             torch_command = os.environ.get('TORCH_COMMAND',
-                                           "pip install torch==1.13.0+cu117 torchvision==0.14.0+cu117 --extra-index-url https://download.pytorch.org/whl/cu117")
+                                           "pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu117")
 
             run(f'{torch_command}', "Installing torch and torchvision", "Couldn't install torch")
         elif 'xformers' in requirement:

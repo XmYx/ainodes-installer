@@ -7,12 +7,12 @@ from platform import platform
 def create_venv(venv_path):
     try:
         if 'Windows' in platform():
-            subprocess.run(["pythonw", "-m", "virtualenv", "--python=python3.10", venv_path])
+            subprocess.run(["python3", "-m", "virtualenv", venv_path])
         else:
-            subprocess.run(["python", "-m", "virtualenv", "--python=python3.10", venv_path])
+            subprocess.run(["python3", "-m", "virtualenv", "--python=python3.10", venv_path])
     except:
         print("Error, Python 3.10 not found. Trying to make env with any python available. If you run into any issue, please delete test_venv folder, and install Python 3.10 before running the installer again.")
-        subprocess.run(["python", "-m", "virtualenv", venv_path])
+        subprocess.run(["python3", "-m", "virtualenv", venv_path])
 
 
 def activate_venv(venv_path):
@@ -24,10 +24,10 @@ if __name__ == "__main__":
     subprocess.run(["pip", "install", "-q", "virtualenv"])
     url = 'https://raw.githubusercontent.com/XmYx/ainodes-installer/main/data/installer.py'
     path = 'data/installer.py'
-    subprocess.run(["curl", "-L", url, "-o", path])
+    #subprocess.run(["curl", "-L", url, "-o", path])
     url = 'https://raw.githubusercontent.com/XmYx/ainodes-installer/main/data/requirements.txt'
     path = 'data/requirements.txt'
-    subprocess.run(["curl", "-L", url, "-o", path])
+    #subprocess.run(["curl", "-L", url, "-o", path])
 
     #print(os.path.exists("test_venv"))
     if os.path.exists("test_venv") == False:
